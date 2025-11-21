@@ -158,14 +158,19 @@ if args.mode == 'train':
                            append=True, separator=';')
 
     print("==> training")
-    model.fit_generator(generator=train_data_gen,
-                        steps_per_epoch=train_data_gen.steps,
-                        validation_data=val_data_gen,
-                        validation_steps=val_data_gen.steps,
-                        epochs=n_trained_chunks + args.epochs,
-                        initial_epoch=n_trained_chunks,
-                        callbacks=[metrics_callback, saver, csv_logger],
-                        verbose=args.verbose)
+
+    # debug for the BatchGen?
+    train_data_gen.return_y_true = False
+    val_data_gen.return_y_true = False
+
+    model.fit(x=train_data_gen.generator,
+              steps_per_epoch=train_data_gen.steps,
+              validation_data=val_data_gen.generator,
+              validation_steps=val_data_gen.steps,
+              epochs=n_trained_chunks + args.epochs,
+              initial_epoch=n_trained_chunks,
+              callbacks=[metrics_callback, saver, csv_logger],
+              verbose=args.verbose)
 
 elif args.mode == 'test':
     # ensure that the code uses test_reader
