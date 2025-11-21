@@ -7,7 +7,7 @@ import os
 
 class Discretizer:
     def __init__(self, timestep=0.8, store_masks=True, impute_strategy='zero', start_time='zero',
-                 config_path=os.path.join(os.path.dirname(__file__), 'resources/discretizer_config.json')):
+                 config_path=os.path.join(os.path.dirname(__file__), 'resources/discretizer_sofa_config.json')):
 
         with open(config_path) as f:
             config = json.load(f)
@@ -17,7 +17,7 @@ class Discretizer:
             self._possible_values = config['possible_values']
             self._normal_values = config['normal_values']
 
-        self._header = ["Hours"] + self._id_to_channel
+        self._header = ["hours_after_icu_adm"] + self._id_to_channel
         self._timestep = timestep
         self._store_masks = store_masks
         self._start_time = start_time
@@ -31,7 +31,7 @@ class Discretizer:
     def transform(self, X, header=None, end=None):
         if header is None:
             header = self._header
-        assert header[0] == "Hours"
+        assert header[0] == "hours_after_icu_adm"
         eps = 1e-6
 
         N_channels = len(self._id_to_channel)
