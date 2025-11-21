@@ -9,7 +9,7 @@ class Network(Model):
 
     def __init__(self, dim, batch_norm, dropout, rec_dropout, task,
                  target_repl=False, deep_supervision=False, num_classes=1,
-                 depth=1, input_dim=76, **kwargs):
+                 depth=1, input_dim=42, **kwargs):
 
         print("==> not used params in network class:", kwargs.keys())
 
