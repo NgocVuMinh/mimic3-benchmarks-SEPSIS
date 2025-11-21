@@ -35,13 +35,13 @@ if args.deep_supervision:
     train_data_loader = common_utils.DeepSupervisionDataLoader(dataset_dir=os.path.join(args.data, 'train'),
                                                                listfile=os.path.join(args.data, 'train_listfile.csv'),
                                                                small_part=args.small_part)
-    val_data_loader = common_utils.DeepSupervisionDataLoader(dataset_dir=os.path.join(args.data, 'train'),
+    val_data_loader = common_utils.DeepSupervisionDataLoader(dataset_dir=os.path.join(args.data, 'val'),
                                                              listfile=os.path.join(args.data, 'val_listfile.csv'),
                                                              small_part=args.small_part)
 else:
     train_reader = SepsisSOFAReader(dataset_dir=os.path.join(args.data, 'train'),
                                       listfile=os.path.join(args.data, 'train_listfile.csv'))
-    val_reader = SepsisSOFAReader(dataset_dir=os.path.join(args.data, 'train'),
+    val_reader = SepsisSOFAReader(dataset_dir=os.path.join(args.data, 'val'),
                                     listfile=os.path.join(args.data, 'val_listfile.csv'))
 
 discretizer = Discretizer(timestep=args.timestep,
@@ -116,8 +116,8 @@ if args.deep_supervision:
                                                  discretizer, normalizer, args.batch_size, shuffle=False)
 else:
     # Set number of batches in one epoch
-    train_nbatches = 2000
-    val_nbatches = 1000
+    train_nbatches = 100
+    val_nbatches = 20
     if args.small_part:
         train_nbatches = 20
         val_nbatches = 20
@@ -138,9 +138,9 @@ else:
                                   shuffle=False)
 if args.mode == 'train':
     # Prepare training
-    path = os.path.join(args.output_dir, 'keras_states/' + model.final_name + '.chunk{epoch}.test{val_loss}.keras')
+    path = os.path.join(args.output_dir, 'keras_states/' + model.final_name + '.chunk{epoch}.keras')
 
-    metrics_callback = keras_utils.LengthOfStayMetrics(train_data_gen=train_data_gen,
+    metrics_callback = keras_utils.SepsisSOFAMetrics(train_data_gen=train_data_gen,
                                                        val_data_gen=val_data_gen,
                                                        partition=args.partition,
                                                        batch_size=args.batch_size,
