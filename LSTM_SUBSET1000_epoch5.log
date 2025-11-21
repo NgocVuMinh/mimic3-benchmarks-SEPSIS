@@ -1,0 +1,812 @@
+python -um mimic3models.sofa.main --data /Volumes/T7/VAE/sepsis/benchmark_lstm_split_SUBSET --network mimic3models/keras_models/lstm.py --dim 64 --timestep 1.0 --epochs 5 --dropout 0.3 --mode train --batch_size 16 --partition custom --output_dir mimic3models/sofa
+/Volumes/T7/mimic3-benchmarks-SEPSIS/mimic3models/sofa/main.py:4: DeprecationWarning: the imp module is deprecated in favour of importlib and slated for removal in Python 3.12; see the module's documentation for alternative uses
+  import imp
+Namespace(network='mimic3models/keras_models/lstm.py', dim=64, depth=1, epochs=5, load_state='', mode='train', batch_size=16, l2=0, l1=0, save_every=1, prefix='', dropout=0.3, rec_dropout=0.0, batch_norm=False, timestep=1.0, imputation='previous', small_part=False, optimizer='adam', lr=0.001, beta_1=0.9, verbose=2, size_coef=4.0, normalizer_state=None, deep_supervision=False, partition='custom', data='/Volumes/T7/VAE/sepsis/benchmark_lstm_split_SUBSET', output_dir='mimic3models/sofa')
+==> using model mimic3models/keras_models/lstm.py
+==> not used params in network class: dict_keys(['network', 'epochs', 'load_state', 'mode', 'batch_size', 'l2', 'l1', 'save_every', 'prefix', 'timestep', 'imputation', 'small_part', 'optimizer', 'lr', 'beta_1', 'verbose', 'size_coef', 'normalizer_state', 'partition', 'data', 'output_dir', 'header'])
+==> model.final_name: k_lstm.n64.d0.3.dep1.bs16.ts1.0.partition=custom
+==> compiling the model
+Model: "network"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                  ┃ Output Shape              ┃         Param # ┃ Connected to               ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ X (InputLayer)                │ (None, None, 42)          │               0 │ -                          │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ not_equal (NotEqual)          │ (None, None, 42)          │               0 │ X[0][0]                    │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ masking (Masking)             │ (None, None, 42)          │               0 │ X[0][0]                    │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ any (Any)                     │ (None, None)              │               0 │ not_equal[0][0]            │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ lstm (LSTM)                   │ (None, 64)                │          27,392 │ masking[0][0], any[0][0]   │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ dropout (Dropout)             │ (None, 64)                │               0 │ lstm[0][0]                 │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ dense (Dense)                 │ (None, 10)                │             650 │ dropout[0][0]              │
+└───────────────────────────────┴───────────────────────────┴─────────────────┴────────────────────────────┘
+ Total params: 28,042 (109.54 KB)
+ Trainable params: 28,042 (109.54 KB)
+ Non-trainable params: 0 (0.00 B)
+==> training
+Epoch 1/5
+
+Epoch 1: saving model to mimic3models/sofa/keras_states/k_lstm.n64.d0.3.dep1.bs16.ts1.0.partition=custom.chunk1.keras
+
+==>predicting on train
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 102ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 110ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 25ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 21ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 23ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 32ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 28ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 69ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 21ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 21ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[1600]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.81242112875
+Mean squared error (MSE) = 66.821800738641
+Mean absolute percentage error (MAPE) = 582.3252169722109
+Cohen kappa score = nan
+
+==>predicting on validation
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 23ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 20ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 26ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 63ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[320]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.360660706249999
+Mean squared error (MSE) = 60.069958112391
+Mean absolute percentage error (MAPE) = 412.5691083136188
+Cohen kappa score = nan
+100/100 - 20s - 201ms/step - loss: 1.3739 - val_loss: 0.1105 - train_mad: 7.8124 - train_mse: 66.8218 - train_mape: 582.3252 - train_kappa: nan - val_mad: 7.3607 - val_mse: 60.0700 - val_mape: 412.5691 - val_kappa: nan
+Epoch 2/5
+
+Epoch 2: saving model to mimic3models/sofa/keras_states/k_lstm.n64.d0.3.dep1.bs16.ts1.0.partition=custom.chunk2.keras
+
+
+==>predicting on train
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 21ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 20ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 22ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 25ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 28ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 34ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 26ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 20ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 22ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 69ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[1600]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.789610997499999
+Mean squared error (MSE) = 66.46725387239101
+Mean absolute percentage error (MAPE) = 583.8220720670357
+Cohen kappa score = nan
+
+==>predicting on validation
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 20ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 23ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 61ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 25ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[320]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.344725574999998
+Mean squared error (MSE) = 59.610606799891
+Mean absolute percentage error (MAPE) = 376.45805702192695
+Cohen kappa score = nan
+100/100 - 17s - 172ms/step - loss: 0.2488 - val_loss: 0.0086 - train_mad: 7.7896 - train_mse: 66.4673 - train_mape: 583.8221 - train_kappa: nan - val_mad: 7.3447 - val_mse: 59.6106 - val_mape: 376.4581 - val_kappa: nan
+Epoch 3/5
+
+Epoch 3: saving model to mimic3models/sofa/keras_states/k_lstm.n64.d0.3.dep1.bs16.ts1.0.partition=custom.chunk3.keras
+
+==>predicting on train
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 25ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 25ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 24ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 29ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 70ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 21ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 32ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 24ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 22ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 20ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[1600]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.796672076249999
+Mean squared error (MSE) = 66.39712981989099
+Mean absolute percentage error (MAPE) = 544.9337338610626
+Cohen kappa score = nan
+
+==>predicting on validation
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 21ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 24ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[320]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.388785706249999
+Mean squared error (MSE) = 60.31654666864101
+Mean absolute percentage error (MAPE) = 381.6626257078032
+Cohen kappa score = nan
+100/100 - 18s - 183ms/step - loss: 0.0597 - val_loss: 0.0024 - train_mad: 7.7967 - train_mse: 66.3971 - train_mape: 544.9337 - train_kappa: nan - val_mad: 7.3888 - val_mse: 60.3165 - val_mape: 381.6626 - val_kappa: nan
+Epoch 4/5
+
+Epoch 4: saving model to mimic3models/sofa/keras_states/k_lstm.n64.d0.3.dep1.bs16.ts1.0.partition=custom.chunk4.keras
+
+==>predicting on train
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 70ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 20ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 22ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 24ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 25ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 20ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 20ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 28ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 22ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 35ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[1600]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.79792207625
+Mean squared error (MSE) = 66.646137399891
+Mean absolute percentage error (MAPE) = 614.2565894041284
+Cohen kappa score = nan
+
+==>predicting on validation
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 63ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 22ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 26ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[320]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.360660706249999
+Mean squared error (MSE) = 60.069958112391
+Mean absolute percentage error (MAPE) = 412.5691083136188
+Cohen kappa score = nan
+100/100 - 18s - 181ms/step - loss: 0.0300 - val_loss: 9.7373e-04 - train_mad: 7.7979 - train_mse: 66.6461 - train_mape: 614.2566 - train_kappa: nan - val_mad: 7.3607 - val_mse: 60.0700 - val_mape: 412.5691 - val_kappa: nan
+Epoch 5/5
+
+Epoch 5: saving model to mimic3models/sofa/keras_states/k_lstm.n64.d0.3.dep1.bs16.ts1.0.partition=custom.chunk5.keras
+
+
+==>predicting on train
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 31ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 21ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 20ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 23ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 28ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 25ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 69ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 19ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 18ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 23ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[1600]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.82536005
+Mean squared error (MSE) = 66.82094184614101
+Mean absolute percentage error (MAPE) = 588.1951768035425
+Cohen kappa score = nan
+
+==>predicting on validation
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 22ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 15ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 62ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 14ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 16ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 10ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 11ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 25ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 17ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 12ms/step
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step
+
+
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+Custom bins confusion matrix:
+[[320]]
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:534: UserWarning: A single label was found in 'y_true' and 'y_pred'. For the confusion matrix to have the correct shape, use the 'labels' parameter to pass all known labels.
+  warnings.warn(
+/Users/ngoc/anaconda3/envs/mimicbench/lib/python3.11/site-packages/sklearn/metrics/_classification.py:897: RuntimeWarning: invalid value encountered in scalar divide
+  k = np.sum(w_mat * confusion) / np.sum(w_mat * expected)
+Mean absolute deviation (MAD) = 7.335350574999998
+Mean squared error (MSE) = 59.70528719364099
+Mean absolute percentage error (MAPE) = 378.73348621467665
+Cohen kappa score = nan
+100/100 - 18s - 180ms/step - loss: 0.0169 - val_loss: 5.4528e-04 - train_mad: 7.8254 - train_mse: 66.8209 - train_mape: 588.1952 - train_kappa: nan - val_mad: 7.3354 - val_mse: 59.7053 - val_mape: 378.7335 - val_kappa: nan
