@@ -1,5 +1,6 @@
 import numpy as np
 from mimic3models import metrics
+from mimic3models.sofa.utils import BatchGen
 
 import keras
 import keras.backend as K
@@ -179,6 +180,82 @@ class LengthOfStayMetrics(keras.callbacks.Callback):
             if self.verbose == 1:
                 print("\tdone {}/{}".format(i, data_gen.steps), end='\r')
             (x, y_processed, y) = data_gen.next(return_y_true=True)
+            pred = self.model.predict(x, batch_size=self.batch_size)
+            if isinstance(x, list) and len(x) == 2:  # deep supervision
+                if pred.shape[-1] == 1:  # regression
+                    pred_flatten = pred.flatten()
+                else:  # classification
+                    pred_flatten = pred.reshape((-1, 10))
+                for m, t, p in zip(x[1].flatten(), y.flatten(), pred_flatten):
+                    if np.equal(m, 1):
+                        y_true.append(t)
+                        predictions.append(p)
+            else:
+                if pred.shape[-1] == 1:
+                    y_true += list(y.flatten())
+                    predictions += list(pred.flatten())
+                else:
+                    y_true += list(y)
+                    predictions += list(pred)
+        print('\n')
+        if self.partition == 'log':
+            predictions = [metrics.get_estimate_log(x, 10) for x in predictions]
+            ret = metrics.print_metrics_log_bins(y_true, predictions)
+        if self.partition == 'custom':
+            predictions = [metrics.get_estimate_custom(x, 10) for x in predictions]
+            ret = metrics.print_metrics_custom_bins(y_true, predictions)
+        if self.partition == 'none':
+            ret = metrics.print_metrics_regression(y_true, predictions)
+        for k, v in ret.items():
+            logs[dataset + '_' + k] = v
+        history.append(ret)
+
+    def on_epoch_end(self, epoch, logs={}):
+        print("\n==>predicting on train")
+        self.calc_metrics(self.train_data_gen, self.train_history, 'train', logs)
+        print("\n==>predicting on validation")
+        self.calc_metrics(self.val_data_gen, self.val_history, 'val', logs)
+
+        if self.early_stopping:
+            max_kappa = np.max([x["kappa"] for x in self.val_history])
+            cur_kappa = self.val_history[-1]["kappa"]
+            max_train_kappa = np.max([x["kappa"] for x in self.train_history])
+            if max_kappa > 0.38 and cur_kappa < 0.35 and max_train_kappa > 0.47:
+                self.model.stop_training = True
+
+
+class SepsisSOFAMetrics(keras.callbacks.Callback):
+    def __init__(self, train_data_gen, val_data_gen, partition, batch_size=32,
+                 early_stopping=True, verbose=2):
+        super(SepsisSOFAMetrics, self).__init__()
+        self.train_data_gen = train_data_gen
+        self.val_data_gen = val_data_gen
+        self.batch_size = batch_size
+        self.partition = partition
+        self.early_stopping = early_stopping
+        self.verbose = verbose
+        self.train_history = []
+        self.val_history = []
+
+    def calc_metrics(self, data_gen, history, dataset, logs):
+        # CREATE A NEW GENERATOR FOR EVALUATION
+        eval_gen = BatchGen(
+            reader=data_gen.reader,
+            partition=data_gen.partition,
+            discretizer=data_gen.discretizer,
+            normalizer=data_gen.normalizer,
+            batch_size=data_gen.batch_size,
+            steps=data_gen.steps,
+            shuffle=False,  # Don't shuffle for evaluation
+            return_names=data_gen.return_names
+        )
+        
+        y_true = []
+        predictions = []
+        for i in range(eval_gen.steps):  # Use eval_gen instead of data_gen
+            if self.verbose == 1:
+                print("\tdone {}/{}".format(i, eval_gen.steps), end='\r')
+            (x, y_processed, y) = eval_gen.next(return_y_true=True)  # Use eval_gen
             pred = self.model.predict(x, batch_size=self.batch_size)
             if isinstance(x, list) and len(x) == 2:  # deep supervision
                 if pred.shape[-1] == 1:  # regression
