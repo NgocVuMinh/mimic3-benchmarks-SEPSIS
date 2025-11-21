@@ -1,4 +1,30 @@
-MIMIC-III Benchmarks
+# Ngoc's notes on adapting to MIMIC-IV SEPSIS
+
+## 21 Nov 2025
+
+Clone my fork of this repo (I've made some changes because this repo and its dependencies are quite old). 
+
+The following set up can work:
+```bash
+conda create -n test_lstm python=3.11
+conda activate test_lstm
+pip install -r requirements.txt
+```
+
+Get the SEPSIS data from OUR repository, **VERSION 3.2**.
+The SUBSET and the FULL data are available. Decompress the data, and run the following command with the appropriate path to the data. It runs on the SUBSET with 5 epochs:
+```bash
+python -um mimic3models.sofa.main --data <YOUR_PATH>/Ver3.2_SUBSET --network mimic3models/keras_models/lstm.py --dim 64 --timestep 1.0 --epochs 5 --dropout 0.3 --mode train --batch_size 16 --partition custom --output_dir mimic3models/sofa
+```
+
+This test runs without errors. BUT I DON'T GUARANTEE IT RUNS CORRECTLY LOL. THE MODEL ARCHITECTURE DESIGN SHOULD BE CHECKED / OPTIMIZED, please check `mimic3models/keras_models/lstm.py`. Except for the `input_dim` (I changed this from 76 to 42), everything else was kept the same.
+
+You can check out my console log here: [LSTM_SUBSET1000_epoch5.log](LSTM_SUBSET1000_epoch5.log)
+
+
+
+
+## MIMIC-III Benchmarks
 =========================
 
 [![Join the chat at https://gitter.im/YerevaNN/mimic3-benchmarks](https://badges.gitter.im/YerevaNN/mimic3-benchmarks.svg)](https://gitter.im/YerevaNN/mimic3-benchmarks?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
