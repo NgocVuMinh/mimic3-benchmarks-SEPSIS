@@ -1,7 +1,7 @@
 import os
 import numpy as np
+import pandas as pd
 import random
-
 
 class Reader(object):
     def __init__(self, dataset_dir, listfile=None):
@@ -206,6 +206,68 @@ class LengthOfStayReader(Reader):
                 "header": header,
                 "name": name}
 
+
+class SepsisSOFAReader:
+    """
+    Reader for your custom LSTM sepsis dataset.
+    Structure:
+        dataset_dir/
+            patientID/
+                patientID_timeseries.csv
+                patientID.csv  # contains column "sofa_score_last"
+    """
+
+    def __init__(self, dataset_dir, patient_list=None):
+        self.dataset_dir = dataset_dir
+
+        # If no patient list is given, infer automatically
+        if patient_list is None:
+            self.patients = sorted(os.listdir(dataset_dir))
+        else:
+            self.patients = patient_list
+
+    def _read_timeseries(self, ts_file):
+        df = pd.read_csv(ts_file)
+
+        assert "hours_after_icu_adm" in df.columns, \
+            "Expected a column named 'hours_after_icu_adm'"
+
+        header = df.columns.to_list()
+        X = df.values.astype(float)
+
+        return X, header
+
+    def _read_label(self, label_file):
+        df = pd.read_csv(label_file)
+        return float(df["sofa_score_last"].iloc[0])
+
+    def read_example(self, index):
+        """
+        Returns:
+          X: 2D NumPy array (T × features)
+          y: last SOFA score
+          t: max time (optional, used for compatibility)
+          header: list of column names
+          name: patient ID
+        """
+        name = self.patients[index]
+        patient_dir = os.path.join(self.dataset_dir, name)
+
+        ts_file = os.path.join(patient_dir, f"{name}_timeseries.csv")
+        label_file = os.path.join(patient_dir, f"{name}.csv")
+
+        X, header = self._read_timeseries(ts_file)
+        y = self._read_label(label_file)
+
+        # Use max hours as t
+        t = np.nanmax(X[:, 0])
+
+        return {"X": X,
+                "t": t,
+                "y": y,
+                "header": header,
+                "name": name}
+    
 
 class PhenotypingReader(Reader):
     def __init__(self, dataset_dir, listfile=None):
