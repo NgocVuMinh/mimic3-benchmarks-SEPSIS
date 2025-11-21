@@ -1,6 +1,6 @@
 from keras.models import Model
 from keras.layers import Input, Dense, LSTM, Masking, Dropout
-from keras.layers.wrappers import Bidirectional, TimeDistributed
+from keras.layers import Bidirectional, TimeDistributed
 from mimic3models.keras_utils import LastTimestep
 from mimic3models.keras_utils import ExtendMask
 
@@ -21,7 +21,7 @@ class Network(Model):
 
         if task in ['decomp', 'ihm', 'ph']:
             final_activation = 'sigmoid'
-        elif task in ['los']:
+        elif task in ['los', 'sofa']:
             if num_classes == 1:
                 final_activation = 'relu'
             else:

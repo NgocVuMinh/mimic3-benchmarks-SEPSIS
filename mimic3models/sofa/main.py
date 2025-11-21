@@ -4,8 +4,8 @@ import os
 import imp
 import re
 
-from mimic3models.length_of_stay import utils
-from mimic3benchmark.readers import LengthOfStayReader
+from mimic3models.sofa import utils
+from mimic3benchmark.readers import SepsisSOFAReader
 
 from mimic3models.preprocessing import Discretizer, Normalizer
 from mimic3models import metrics
@@ -39,9 +39,9 @@ if args.deep_supervision:
                                                              listfile=os.path.join(args.data, 'val_listfile.csv'),
                                                              small_part=args.small_part)
 else:
-    train_reader = LengthOfStayReader(dataset_dir=os.path.join(args.data, 'train'),
+    train_reader = SepsisSOFAReader(dataset_dir=os.path.join(args.data, 'train'),
                                       listfile=os.path.join(args.data, 'train_listfile.csv'))
-    val_reader = LengthOfStayReader(dataset_dir=os.path.join(args.data, 'train'),
+    val_reader = SepsisSOFAReader(dataset_dir=os.path.join(args.data, 'train'),
                                     listfile=os.path.join(args.data, 'val_listfile.csv'))
 
 discretizer = Discretizer(timestep=args.timestep,
@@ -85,7 +85,7 @@ print("==> model.final_name:", model.final_name)
 # Compile the model
 print("==> compiling the model")
 optimizer_config = {'class_name': args.optimizer,
-                    'config': {'lr': args.lr,
+                    'config': {'learning_rate': args.lr,
                                'beta_1': args.beta_1}}
 
 if args.partition == 'none':
@@ -138,7 +138,7 @@ else:
                                   shuffle=False)
 if args.mode == 'train':
     # Prepare training
-    path = os.path.join(args.output_dir, 'keras_states/' + model.final_name + '.chunk{epoch}.test{val_loss}.state')
+    path = os.path.join(args.output_dir, 'keras_states/' + model.final_name + '.chunk{epoch}.test{val_loss}.keras')
 
     metrics_callback = keras_utils.LengthOfStayMetrics(train_data_gen=train_data_gen,
                                                        val_data_gen=val_data_gen,
@@ -149,7 +149,7 @@ if args.mode == 'train':
     dirname = os.path.dirname(path)
     if not os.path.exists(dirname):
         os.makedirs(dirname)
-    saver = ModelCheckpoint(path, verbose=1, period=args.save_every)
+    saver = ModelCheckpoint(path, verbose=1, save_freq=args.save_every)
 
     keras_logs = os.path.join(args.output_dir, 'keras_logs')
     if not os.path.exists(keras_logs):
@@ -209,7 +209,7 @@ elif args.mode == 'test':
     else:
         del train_reader
         del val_reader
-        test_reader = LengthOfStayReader(dataset_dir=os.path.join(args.data, 'test'),
+        test_reader = SepsisSOFAReader(dataset_dir=os.path.join(args.data, 'test'),
                                          listfile=os.path.join(args.data, 'test_listfile.csv'))
         test_data_gen = utils.BatchGen(reader=test_reader,
                                        discretizer=discretizer,
