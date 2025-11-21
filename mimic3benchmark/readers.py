@@ -206,67 +206,68 @@ class LengthOfStayReader(Reader):
                 "header": header,
                 "name": name}
 
-
-class SepsisSOFAReader:
+class SepsisSOFAReader(Reader):
     """
-    Reader for your custom LSTM sepsis dataset.
-    Structure:
-        dataset_dir/
-            patientID/
-                patientID_timeseries.csv
-                patientID.csv  # contains column "sofa_score_last"
+    Reader for the benchmark_lstm data structure:
+    dataset_dir/
+        train_listfile.csv
+        val_listfile.csv
+        train/
+            47629115/47629115_timeseries.csv
+            47629115/47629115.csv
+        val/
+            ...
     """
 
-    def __init__(self, dataset_dir, patient_list=None):
-        self.dataset_dir = dataset_dir
+    def __init__(self, dataset_dir, listfile=None):
+        super().__init__(dataset_dir, listfile)
 
-        # If no patient list is given, infer automatically
-        if patient_list is None:
-            self.patients = sorted(os.listdir(dataset_dir))
-        else:
-            self.patients = patient_list
+        # listfile rows: fname, t, y
+        parsed = []
+        for line in self._data:
+            fname, t, y = line.strip().split(',')
+            parsed.append((fname, float(t), float(y)))
+        self._data = parsed
 
-    def _read_timeseries(self, ts_file):
-        df = pd.read_csv(ts_file)
+    def _read_timeseries(self, ts_filename, time_bound):
+        """
+        ts_filename = '47629115/47629115_timeseries.csv'
+        """
+        full_path = os.path.join(self._dataset_dir, ts_filename)
 
-        assert "hours_after_icu_adm" in df.columns, \
-            "Expected a column named 'hours_after_icu_adm'"
+        ret = []
+        with open(full_path, "r") as f:
+            header = f.readline().strip().split(',')
 
-        header = df.columns.to_list()
-        X = df.values.astype(float)
+            # Expect time column to be 'hours_after_icu_adm'
+            assert header[0] == "hours_after_icu_adm", \
+                f"Expected first column 'hours_after_icu_adm', got '{header[0]}'"
 
-        return X, header
+            for line in f:
+                cols = line.strip().split(',')
+                t = float(cols[0])
+                if t > time_bound + 1e-6:
+                    break
+                ret.append(np.array(cols))
 
-    def _read_label(self, label_file):
-        df = pd.read_csv(label_file)
-        return float(df["sofa_score_last"].iloc[0])
+        return np.stack(ret), header
 
     def read_example(self, index):
-        """
-        Returns:
-          X: 2D NumPy array (T × features)
-          y: last SOFA score
-          t: max time (optional, used for compatibility)
-          header: list of column names
-          name: patient ID
-        """
-        name = self.patients[index]
-        patient_dir = os.path.join(self.dataset_dir, name)
+        if index < 0 or index >= len(self._data):
+            raise ValueError("Index must be between 0 and len-1")
 
-        ts_file = os.path.join(patient_dir, f"{name}_timeseries.csv")
-        label_file = os.path.join(patient_dir, f"{name}.csv")
+        ts_filename, t, y = self._data[index]
 
-        X, header = self._read_timeseries(ts_file)
-        y = self._read_label(label_file)
+        X, header = self._read_timeseries(ts_filename, t)
 
-        # Use max hours as t
-        t = np.nanmax(X[:, 0])
+        return {
+            "X": X,
+            "t": t,
+            "y": y,
+            "header": header,
+            "name": ts_filename
+        }
 
-        return {"X": X,
-                "t": t,
-                "y": y,
-                "header": header,
-                "name": name}
     
 
 class PhenotypingReader(Reader):
