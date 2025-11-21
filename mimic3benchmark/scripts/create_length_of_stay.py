@@ -7,7 +7,7 @@ random.seed(49297)
 from tqdm import tqdm
 
 
-def process_partition(args, partition, sample_rate=1.0, shortest_length=4.0, eps=1e-6):
+def process_partition(args, partition, sample_rate=1.0, shortest_length=1.0, eps=1e-6):
     output_dir = os.path.join(args.output_path, partition)
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
